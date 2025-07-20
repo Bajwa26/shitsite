@@ -44,10 +44,32 @@
             cursor: pointer;
             border: none;
             background: none;
-            position: relative;
+            position: fixed; /* Changed from relative to fixed */
+            top: 20px;
+            right: 40px;
             z-index: 2001;
             transition: all 0.3s ease;
+            color: #333;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        /* Cross button styling when menu is active */
+        .nav-toggle.active {
+            color: white; /* White cross on dark overlay */
+            transform: rotate(180deg); /* Subtle rotation effect */
+        }
+
+        /* Enhanced cross symbol */
+        .nav-toggle.active::before {
+            content: '✕';
+            font-size: 28px;
+            font-weight: normal;
+        }
+
 
         /* Full-Screen Navigation Overlay */
         .nav-overlay {
@@ -649,16 +671,19 @@
         const navToggle = document.getElementById('navToggle');
         const navOverlay = document.getElementById('navOverlay');
 
-        // Toggle menu function
+        // Toggle menu function with cross button
         function toggleMenu() {
             navOverlay.classList.toggle('active');
-            
-            // Change hamburger to X when open
+            navToggle.classList.toggle('active');
+        
+            // Change hamburger to cross when open
             if (navOverlay.classList.contains('active')) {
                 navToggle.innerHTML = '✕';
+                navToggle.style.color = 'white';
                 document.body.style.overflow = 'hidden'; // Prevent scrolling
             } else {
                 navToggle.innerHTML = '☰';
+                navToggle.style.color = '#333';
                 document.body.style.overflow = ''; // Restore scrolling
             }
         }
@@ -666,7 +691,9 @@
         // Close menu function
         function closeMenu() {
             navOverlay.classList.remove('active');
+            navToggle.classList.remove('active');
             navToggle.innerHTML = '☰';
+            navToggle.style.color = '#333';
             document.body.style.overflow = ''; // Restore scrolling
         }
 
