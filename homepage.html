@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tea with Therapist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fafafa;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+
+        .nav-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            position: relative;
+            z-index: 2001;
+            transition: all 0.3s ease;
+        }
+
+        /* Full-Screen Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-overlay-content {
+            text-align: center;
+            color: white;
+        }
+
+        .nav-overlay nav {
+            margin-bottom: 40px;
+        }
+
+        .nav-overlay ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-overlay li {
+            margin: 40px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .nav-overlay.active li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger animation effect */
+        .nav-overlay.active li:nth-child(1) { transition-delay: 0.1s; }
+        .nav-overlay.active li:nth-child(2) { transition-delay: 0.2s; }
+        .nav-overlay.active li:nth-child(3) { transition-delay: 0.3s; }
+        .nav-overlay.active li:nth-child(4) { transition-delay: 0.4s; }
+        .nav-overlay.active li:nth-child(5) { transition-delay: 0.5s; }
+
+        .nav-overlay a {
+            color: white;
+            text-decoration: none;
+            font-size: 3rem;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-overlay a:hover {
+            color: #ccc;
+        }
+
+        .nav-overlay a::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-overlay a:hover::after {
+            width: 100%;
+        }
+
+        .nav-close-text {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 60px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Enlarged Oval Image Behind Text */
+        .hero-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            width: 420px;
+            height: 520px;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 5;
+            opacity: 0.18;
+            filter: blur(0.8px);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: normal;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 15;
+        }
+
+        .hero h1 .highlight {
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #666;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 15;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 2px solid #333;
+            background: transparent;
+            text-decoration: none;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 15;
+        }
+
+        .cta-button:hover {
+            background: #333;
+            color: white;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: normal;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            height: 400px;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Book Session Section */
+        .book-session {
+            background: white;
+            padding: 100px 40px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: #333;
+            color: white;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #555;
+        }
+
+        /* Resources Section */
+        .resources {
+            background: #f9f9f9;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .resource-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .resource-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .resource-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 60px 40px 40px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            padding-top: 30px;
+            margin-top: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 60px 20px;
+            }
+            
+            .book-session {
+                padding: 60px 20px;
+            }
+
+            .nav-overlay a {
+                font-size: 2rem;
+            }
+
+            .hero-image {
+                width: 280px;
+                height: 350px;
+                opacity: 0.12;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">tea with therapist</div>
+        <button class="nav-toggle" id="navToggle">☰</button>
+    </header>
+
+    <!-- Full-Screen Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-overlay-content">
+            <nav>
+                <ul>
+                    <li><a href="#home" onclick="closeMenu()">home</a></li>
+                    <li><a href="#about" onclick="closeMenu()">about</a></li>
+                    <li><a href="#book" onclick="closeMenu()">book session</a></li>
+                    <li><a href="#resources" onclick="closeMenu()">resources</a></li>
+                    <li><a href="#contact" onclick="closeMenu()">contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-close-text">Press ESC to close</div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Enlarged Background Image Element -->
+        <div class="hero-image">
+            <img src="IMG_2917.jpg" alt="Therapist professional photo">
+        </div>
+        
+        <div class="hero-content">
+            <h1>Therapy<span class="highlight">sessions</span></h1>
+            <p>Creating a safe, nurturing space for healing and growth through compassionate therapeutic conversations, since 2025.</p>
+            <a href="#book" class="cta-button">Schedule Session</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2 class="section-title">About</h2>
+        <p class="section-subtitle">Understanding your journey through personalized therapeutic care</p>
+        
+        <div class="about-content">
+            <div class="about-text">
+                <p>As a licensed therapist with over a decade of experience, I specialize in creating warm, supportive environments where healing can flourish. My approach combines traditional therapeutic techniques with mindfulness practices and innovative tools.</p>
+                
+                <p>I believe that every individual deserves a space where they feel heard, understood, and empowered to navigate life's challenges. Whether you're dealing with anxiety, depression, relationship issues, or seeking personal growth, I'm here to support your unique journey.</p>
+                
+                <p>My practice integrates evidence-based therapies including CBT, DBT, and mindfulness-based interventions, tailored to meet your specific needs and goals.</p>
+            </div>
+            
+            <div class="about-image">
+                [Your Professional Photo Here]
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Session Section -->
+    <section class="book-session" id="book">
+        <div class="section">
+            <h2 class="section-title">Book a Session</h2>
+            <p class="section-subtitle">Take the first step toward your mental wellness journey</p>
+            
+            <div class="form-container">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="session-type">Preferred Session Type</label>
+                        <select id="session-type" name="session-type">
+                            <option>Individual Therapy</option>
+                            <option>Couples Therapy</option>
+                            <option>Group Therapy</option>
+                            <option>Online Session</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="availability">Preferred Availability</label>
+                        <select id="availability" name="availability">
+                            <option>Morning (9 AM - 12 PM)</option>
+                            <option>Afternoon (12 PM - 5 PM)</option>
+                            <option>Evening (5 PM - 8 PM)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Tell me about what brings you to therapy (optional)</label>
+                        <textarea id="message" name="message" placeholder="Share anything you'd like me to know before our first session..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Request Appointment</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section resources" id="resources">
+        <h2 class="section-title">Resources</h2>
+        <p class="section-subtitle">Curated AI prompts and tools to support your mental wellness journey</p>
+        
+        <div class="resources-grid">
+            <div class="resource-card">
+                <h3>Daily Reflection Prompts</h3>
+                <p>AI-generated prompts designed to help you process emotions and gain insights into your daily experiences through guided self-reflection.</p>
+                <a href="#" class="resource-link">Access Prompts →</a>
+            </div>
+            
+            <div class="resource-card">
+                <h3>Anxiety Management Tools</h3>
+                <p>Personalized AI prompts that help identify anxiety triggers, develop coping strategies, and create calming mental exercises.</p>
+                <a href="#" class="resource-link">Get Tools →</a>
+            </div>
+            
+            <div class="resource-card">
+                <h3>Goal Setting & Growth</h3>
+                <p>Structured AI prompts to help clarify your values, set meaningful goals, and track your personal development journey.</p>
+                <a href="#" class="resource-link">Start Growing →</a>
+            </div>
+            
+            <div class="resource-card">
+                <h3>Relationship Insights</h3>
+                <p>AI prompts focused on improving communication, understanding relationship patterns, and building healthier connections.</p>
+                <a href="#" class="resource-link">Explore Prompts →</a>
+            </div>
+            
+            <div class="resource-card">
+                <h3>Mindfulness Practices</h3>
+                <p>AI-curated mindfulness exercises and meditation prompts tailored to your current emotional state and needs.</p>
+                <a href="#" class="resource-link">Practice Now →</a>
+            </div>
+            
+            <div class="resource-card">
+                <h3>Crisis Support Resources</h3>
+                <p>Emergency prompts and immediate support tools for managing crisis moments, with professional resources and helplines.</p>
+                <a href="#" class="resource-link">Get Support →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p>Dr. Sarah Thompson, LMFT</p>
+                <p>Email: hello@teawiththerapist.com</p>
+                <p>Phone: (555) 123-4567</p>
+                <p>Address: 123 Wellness Street, Suite 200<br>Mindful City, MC 12345</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Office Hours</h3>
+                <p>Monday - Thursday: 9:00 AM - 7:00 PM</p>
+                <p>Friday: 9:00 AM - 5:00 PM</p>
+                <p>Weekend: By appointment only</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Emergency Resources</h3>
+                <p>Crisis Text Line: Text HOME to 741741</p>
+                <p>National Suicide Prevention Lifeline: 988</p>
+                <p>Emergency: 911</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Tea with Therapist. All rights reserved. | Licensed in California & New York</p>
+        </div>
+    </footer>
+
+    <script>
+        // Get DOM elements
+        const navToggle = document.getElementById('navToggle');
+        const navOverlay = document.getElementById('navOverlay');
+
+        // Toggle menu function
+        function toggleMenu() {
+            navOverlay.classList.toggle('active');
+            
+            // Change hamburger to X when open
+            if (navOverlay.classList.contains('active')) {
+                navToggle.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            } else {
+                navToggle.innerHTML = '☰';
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        }
+
+        // Close menu function
+        function closeMenu() {
+            navOverlay.classList.remove('active');
+            navToggle.innerHTML = '☰';
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Event listeners
+        navToggle.addEventListener('click', toggleMenu);
+
+        // Close menu when pressing escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        // Close menu when clicking on overlay background
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay) {
+                closeMenu();
+            }
+        });
+    </script>
+</body>
+</html>
