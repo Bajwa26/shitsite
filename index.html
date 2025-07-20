@@ -44,10 +44,23 @@
             cursor: pointer;
             border: none;
             background: none;
-            position: relative;
+            position: fixed;
+            top: 20px;
+            right: 40px;
             z-index: 2002;
             transition: all 0.3s ease;
+            color: #333; /* Default hamburger color */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .nav-toggle.active {
+            color: white !important; /* Ensures white X when active */
+        }
+
 
         /* Full-Screen Navigation Overlay */
         .nav-overlay {
@@ -644,47 +657,48 @@
     </footer>
 
     <script>
-        // Get DOM elements
-        const navToggle = document.getElementById('navToggle');
-        const navOverlay = document.getElementById('navOverlay');
+    // Get DOM elements
+    const navToggle = document.getElementById('navToggle');
+    const navOverlay = document.getElementById('navOverlay');
 
-        // Toggle menu function
-        function toggleMenu() {
-            navOverlay.classList.toggle('active');
-            
-            // Change hamburger to X when open
-            if (navOverlay.classList.contains('active')) {
-                navToggle.innerHTML = '✕';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            } else {
-                navToggle.innerHTML = '☰';
-                document.body.style.overflow = ''; // Restore scrolling
-            }
-        }
-
-        // Close menu function
-        function closeMenu() {
-            navOverlay.classList.remove('active');
+    // Toggle menu function with guaranteed white cross
+    function toggleMenu() {
+        navOverlay.classList.toggle('active');
+        
+        if (navOverlay.classList.contains('active')) {
+            navToggle.innerHTML = '✕';
+            navToggle.classList.add('active');
+            navToggle.style.color = 'white'; // White cross when menu is open
+            document.body.style.overflow = 'hidden';
+        } else {
             navToggle.innerHTML = '☰';
-            document.body.style.overflow = ''; // Restore scrolling
+            navToggle.classList.remove('active');
+            navToggle.style.color = '#333'; // Default hamburger color
+            document.body.style.overflow = '';
         }
+    }
 
-        // Event listeners
-        navToggle.addEventListener('click', toggleMenu);
+    function closeMenu() {
+        navOverlay.classList.remove('active');
+        navToggle.innerHTML = '☰';
+        navToggle.classList.remove('active');
+        navToggle.style.color = '#333';
+        document.body.style.overflow = '';
+    }
 
-        // Close menu when pressing escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeMenu();
-            }
-        });
+    navToggle.addEventListener('click', toggleMenu);
 
-        // Close menu when clicking on overlay background
-        navOverlay.addEventListener('click', function(e) {
-            if (e.target === navOverlay) {
-                closeMenu();
-            }
-        });
-    </script>
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeMenu();
+        }
+    });
+
+    navOverlay.addEventListener('click', function(e) {
+        if (e.target === navOverlay) {
+            closeMenu();
+        }
+    });
+</script>
 </body>
 </html>
