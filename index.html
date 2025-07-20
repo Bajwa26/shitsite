@@ -18,7 +18,7 @@
             background-color: #fafafa;
         }
 
-      /* Header */
+        /* Header */
         header {
             background: white;
             padding: 20px 40px;
@@ -32,43 +32,22 @@
             align-items: center;
         }
 
-        /* Updated Navigation Toggle - Fixed Visibility */
+        .logo {
+            font-size: 18px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+
         .nav-toggle {
             font-size: 24px;
             cursor: pointer;
             border: none;
             background: none;
-            position: fixed;
-            top: 30px;
-            right: 40px;
-            z-index: 2002;
+            position: relative;
+            z-index: 2001;
             transition: all 0.3s ease;
-            color: #333;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        
-        /* Force white cross button when menu is active */
-        .nav-toggle.menu-open {
-            color: white !important;
-            background: transparent !important;
-            font-size: 32px !important;
-            font-weight: bold !important;
-        }
-
-        /* Remove the logo class from header when menu is open */
-        .menu-open-state .logo {
-            color: white;
-        }
-
-
-        .nav-toggle.active {
-            color: white !important; /* Ensures white X when active */
-        }
-
 
         /* Full-Screen Navigation Overlay */
         .nav-overlay {
@@ -496,9 +475,10 @@
                     <li><a href="#about" onclick="closeMenu()">about</a></li>
                     <li><a href="#book" onclick="closeMenu()">book session</a></li>
                     <li><a href="#resources" onclick="closeMenu()">resources</a></li>
+                    <li><a href="#contact" onclick="closeMenu()">contact</a></li>
                 </ul>
             </nav>
-            <div class="nav-close-text">Click/Tap anywhere to close</div>
+            <div class="nav-close-text">Press ESC to close</div>
         </div>
     </div>
 
@@ -665,48 +645,47 @@
     </footer>
 
     <script>
-    // Get DOM elements
-    const navToggle = document.getElementById('navToggle');
-    const navOverlay = document.getElementById('navOverlay');
+        // Get DOM elements
+        const navToggle = document.getElementById('navToggle');
+        const navOverlay = document.getElementById('navOverlay');
 
-    // Toggle menu function with guaranteed white cross
-    function toggleMenu() {
-        navOverlay.classList.toggle('active');
-        
-        if (navOverlay.classList.contains('active')) {
-            navToggle.innerHTML = '✕';
-            navToggle.classList.add('active');
-            navToggle.style.color = 'white'; // White cross when menu is open
-            document.body.style.overflow = 'hidden';
-        } else {
+        // Toggle menu function
+        function toggleMenu() {
+            navOverlay.classList.toggle('active');
+            
+            // Change hamburger to X when open
+            if (navOverlay.classList.contains('active')) {
+                navToggle.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            } else {
+                navToggle.innerHTML = '☰';
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        }
+
+        // Close menu function
+        function closeMenu() {
+            navOverlay.classList.remove('active');
             navToggle.innerHTML = '☰';
-            navToggle.classList.remove('active');
-            navToggle.style.color = '#333'; // Default hamburger color
-            document.body.style.overflow = '';
+            document.body.style.overflow = ''; // Restore scrolling
         }
-    }
 
-    function closeMenu() {
-        navOverlay.classList.remove('active');
-        navToggle.innerHTML = '☰';
-        navToggle.classList.remove('active');
-        navToggle.style.color = '#333';
-        document.body.style.overflow = '';
-    }
+        // Event listeners
+        navToggle.addEventListener('click', toggleMenu);
 
-    navToggle.addEventListener('click', toggleMenu);
+        // Close menu when pressing escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeMenu();
-        }
-    });
-
-    navOverlay.addEventListener('click', function(e) {
-        if (e.target === navOverlay) {
-            closeMenu();
-        }
-    });
-</script>
+        // Close menu when clicking on overlay background
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay) {
+                closeMenu();
+            }
+        });
+    </script>
 </body>
 </html>
