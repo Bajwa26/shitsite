@@ -1,0 +1,456 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fafafa;
+        }
+
+
+        /* Header */
+        header {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+
+        .nav-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            left: 96%;
+            padding-top: 13px;
+            border: none;
+            background: none;
+            position: absolute;
+            z-index: 2002;
+            transition: all 0.3s ease;
+        }
+
+        /* Full-Screen Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.973);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-overlay-content {
+            text-align: center;
+            z-index: 2001;
+            color: white;
+        }
+
+        .nav-overlay nav {
+            margin-bottom: 40px;
+        }
+
+        .nav-overlay ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-overlay li {
+            margin: 40px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .nav-overlay.active li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger animation effect */
+        .nav-overlay.active li:nth-child(1) { transition-delay: 0.1s; }
+        .nav-overlay.active li:nth-child(2) { transition-delay: 0.2s; }
+        .nav-overlay.active li:nth-child(3) { transition-delay: 0.3s; }
+        .nav-overlay.active li:nth-child(4) { transition-delay: 0.4s; }
+        .nav-overlay.active li:nth-child(5) { transition-delay: 0.5s; }
+
+        .nav-overlay a {
+            color: white;
+            text-decoration: none;
+            font-size: 3rem;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-overlay a:hover {
+            color: #ccc;
+        }
+
+        .nav-overlay a::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-overlay a:hover::after {
+            width: 100%;
+        }
+
+        .nav-close-text {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 60px;
+        }
+
+        /* Hero Section - Keeps Original Gradient Background */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        /* Clean Photo Placement - No Overlays, Separate from Text */
+        .hero-image {
+            width: 420px;
+            height: 520px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 35%; /*image becomes better positioned ion know tho*/
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: normal;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .hero h1 .highlight {
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #666;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 2px solid #333;
+            background: #333;
+            text-decoration: none;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 50px; /* Added this line for better spacing */
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: #333;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: normal;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            height: 575px;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Add this line */
+            border-radius: 8px; /* Optional: adds rounded corners */
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+            transform: scale(1.00); /* Scales down while maintaining the larger dimensions */
+        }
+    
+        /* Book Session Section */
+        .book-session {
+            background: white;
+            padding: 100px 40px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: #333;
+            color: white;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #555;
+        }
+
+        /* Resources Section */
+        .resources {
+            background: #f9f9f9;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .resource-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .resource-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .resource-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 60px 40px 40px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            padding-top: 30px;
+            margin-top: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 60px 20px;
+            }
+            
+            .book-session {
+                padding: 60px 20px;
+            }
+
+            .nav-overlay a {
+                font-size: 2rem;
+            }
+
+            .hero-image {
+                width: 280px;
+                height: 350px;
+            }
+
+            .hero-content {
+                padding: 0 20px;
+            }
+        }
