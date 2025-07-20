@@ -18,7 +18,7 @@
             background-color: #fafafa;
         }
 
-        /* Header */
+      /* Header */
         header {
             background: white;
             padding: 20px 40px;
@@ -32,30 +32,38 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 18px;
-            font-weight: normal;
-            letter-spacing: 2px;
-            text-transform: lowercase;
-        }
-
+        /* Updated Navigation Toggle - Fixed Visibility */
         .nav-toggle {
             font-size: 24px;
             cursor: pointer;
             border: none;
             background: none;
             position: fixed;
-            top: 20px;
+            top: 30px;
             right: 40px;
             z-index: 2002;
             transition: all 0.3s ease;
-            color: #333; /* Default hamburger color */
-            width: 40px;
-            height: 40px;
+            color: #333;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+        
+        /* Force white cross button when menu is active */
+        .nav-toggle.menu-open {
+            color: white !important;
+            background: transparent !important;
+            font-size: 32px !important;
+            font-weight: bold !important;
+        }
+
+        /* Remove the logo class from header when menu is open */
+        .menu-open-state .logo {
+            color: white;
+        }
+
 
         .nav-toggle.active {
             color: white !important; /* Ensures white X when active */
@@ -490,7 +498,7 @@
                     <li><a href="#resources" onclick="closeMenu()">resources</a></li>
                 </ul>
             </nav>
-            <div class="nav-close-text">Press ESC to close</div>
+            <div class="nav-close-text">Click/Tap anywhere to close</div>
         </div>
     </div>
 
